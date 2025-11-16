@@ -14,9 +14,10 @@ const App = () => {
     <div className='flex h-screen w-screen'>
       <Sidebar/>
       <Routes>
+        
         <Route path='/' element={<Chatbox/>}/>
         <Route path='/login' element={<Login/>}/>
-       <Route path='/credits' element={<Credits/>}/>
+        <Route path='/credits' element={<Credits/>}/>
         <Route path='/community' element={<Community/>}/>
       </Routes>
     </div>
