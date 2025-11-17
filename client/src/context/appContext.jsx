@@ -1,5 +1,6 @@
-import { createContext, use, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { dummyChats, dummyUserData } from "../assets/assets";
 
 const Appcontext = createContext();
 
@@ -16,8 +17,15 @@ export const AppContextProvider = ({ children }) => {
     }
 
     const fetchUsersChats = async () => {
-             setChats(dummyChats)
-             setSelectedChat(dummyChats[0])
+        try {
+            console.log('Fetching chats...', dummyChats);
+            setChats(dummyChats);
+            if (dummyChats && dummyChats.length > 0) {
+                setSelectedChat(dummyChats[0]);
+            }
+        } catch (error) {
+            console.error('Error fetching chats:', error);
+        }
     }
 
 
