@@ -3,15 +3,15 @@ import { useAppContext } from '../context/appContext.jsx'
 import { assets } from '../assets/assets.js'
 
 import moment from 'moment'
-const Sidebar = () => {
+const Sidebar = ({isMenuOpen, setIsMenuOpen}) => {
 
   const { chats, setSelectedChat, theme, setTheme, user, navigate } = useAppContext()
   const [search, setSearch] = useState('')
 
   return (
-    <div className="flex flex-col h-screen min-w-72 p-5 bg-white/90 
+    <div className={`flex flex-col h-screen min-w-72 p-5 bg-white/90 
     dark:bg-gray-900/40 border-r border-gray-200 dark:border-white/10 backdrop-blur-3xl transition-all duration-500 
-    max-md:absolute left-0 z-1">
+    max-md:absolute left-0 z-1 ${!isMenuOpen && 'max-md:-translate-x-full'}`}>
 
       {/* Logo */}
       <img src={theme === 'light' ? assets.logo_full_dark : assets.logo_full} alt="Gemini Clone logo" className='w-40' />
@@ -26,7 +26,7 @@ const Sidebar = () => {
       {/* Search conversations */}
       <div className='flex items-center gap-2 p-3 mt-4 border border-gray-200
         dark:border-white/20 rounded-md bg-gray-100 dark:bg-gray-800'>
-        <img src={assets.search_icon} className='w-4 dark:invert' alt='Search icon' />
+        <img src={assets.search_icon} className='w-4 invert dark:invert-0' alt='Search icon' />
         <input onChange={(e) => setSearch(e.target.value)} value={search} type="text"
           placeholder='Search conversations' className='w-full text-xs text-gray-900 dark:text-white 
           placeholder:text-gray-400 outline-none bg-transparent' />
@@ -38,7 +38,7 @@ const Sidebar = () => {
         {
           chats.filter((chat) => chat.messages[0] ? chat.messages[0]?.content.toLowerCase().includes(search.toLowerCase()) : chat.name.
             toLowerCase().includes(search.toLowerCase())).map((chat) => (
-              <div key={chat._id} className='p-2 px-4 dark:bg-[#57317C]/10 border
+              <div onClick={()=> {navigate('/'); setSelectedChat(chat); setIsMenuOpen(false)}} key={chat._id} className='p-2 px-4 dark:bg-[#57317C]/10 border
             border-gray-300 dark:border-[#80609F]/15 rounded-md cursor-pointer
             flex justify-between group'>
                 <div>
@@ -53,7 +53,7 @@ const Sidebar = () => {
                 </div>
                 <img
                   src={assets.bin_icon}
-                  className='hidden group-hover:block w-4 h-4 cursor-pointer dark:invert opacity-70 hover:opacity-100 transition-opacity'
+                  className='hidden group-hover:block w-4 h-4 cursor-pointer invert dark:invert-0 opacity-70 hover:opacity-100 transition-opacity'
                   alt='Delete chat'
                 />
               </div>
@@ -61,7 +61,7 @@ const Sidebar = () => {
         }
       </div>
       {/* Community Images */}
-      <div onClick={() => { navigate('/community') }} className='flex items-center gap-2 p-3 mt-4 border border-gray-300
+      <div onClick={() => { navigate('/community'); setIsMenuOpen(false) }} className='flex items-center gap-2 p-3 mt-4 border border-gray-300
         dark:border-black/15 rounded-md cursor-pointer hover:scale-103 transition-all'>
         <img src={assets.gallery_icon} className='w-4 h-4 invert dark:invert-0' alt='Community' />
         <div className='flex flex-col text-sm'>
@@ -71,7 +71,7 @@ const Sidebar = () => {
       </div>
 
       {/* Credits purchase options*/}
-      <div onClick={() => { navigate('/credits') }} className='flex items-center gap-2 p-3 mt-4 border border-gray-300
+      <div onClick={() => { navigate('/credits'); setIsMenuOpen(false) }} className='flex items-center gap-2 p-3 mt-4 border border-gray-300
         dark:border-black/15 rounded-md cursor-pointer hover:scale-103 transition-all'>
         <div className='w-4.5 text-gray-700 dark:text-white'>
           <img src={assets.diamond_icon} className='w-full h-full dark:invert' alt='Credits' />
@@ -101,9 +101,18 @@ const Sidebar = () => {
         </label>
       </div>
 
-     
+     {/* User Account */}
+      <div className='flex items-center gap-3 p-3 mt-4 border border-gray-300
+        dark:border-black/15 rounded-md cursor-pointer group'>
+        <img src={assets.user_icon} className='w-7 rounded-full'/>
+        <p className='flex-1 text-sm dark:text-primary truncate'>{user ? user.name :
+          "Login your account"}</p>
+        {user && <img src={assets.logout_icon} className='h-5 cursor-pointer hidden
+        not-dark:invert group-hover:block'/>}
+      </div>
 
-
+    <img onClick={()=> setIsMenuOpen(false)} src={assets.close_icon} className='absolute top-3 right-3 w-5 h-5
+    cursor-pointer md:hidden not-dark:invert' alt=''/>
     </div>
   )
 }
