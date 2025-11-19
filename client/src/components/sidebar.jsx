@@ -31,7 +31,6 @@ const Sidebar = ({isMenuOpen, setIsMenuOpen}) => {
           placeholder='Search conversations' className='w-full text-xs text-gray-900 dark:text-white 
           placeholder:text-gray-400 outline-none bg-transparent' />
       </div>
-
       {/* Recent chats */}
       {chats.length > 0 && <p className='mt-4 text-sm'>Recent Chats</p>}
       <div className='flex-1 overflow-y-scroll mt-3 text-sm space-y-3'>
