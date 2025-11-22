@@ -6,6 +6,7 @@ import { Route, Routes } from 'react-router-dom'
 import Community from './pages/community'
 import Login from './pages/login'
 import { assets } from './assets/assets'
+import './assets/prism.css'
 const App = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false)
