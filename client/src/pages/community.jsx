@@ -1,6 +1,21 @@
 import React from 'react'
 
 const community = () =>  {
+
+  const [images, setImages] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  const fetchImages = async () =>{
+     setImages(dummyPublishedImages)
+     setLoading(false)
+  }
+
+  useEffect(() => {
+    fetchImages()
+  },[])
+
+  if(loading) return <Loading/>
+  
   return (
    <div className='p-6 pt-12 xl:px-12 2xl:px-20 w-full mx-auto h-full
     overflow-y-scroll'>
