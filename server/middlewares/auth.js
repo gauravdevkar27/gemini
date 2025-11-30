@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken'
-import User from '../models/user.model'
+import User from '../models/user.model.js'
 
 
-export const prtect = async (req, res, next) => {
+export const protect = async (req, res, next) => {
     let token = req.headers.authorization
 
     try {
@@ -26,3 +26,5 @@ export const prtect = async (req, res, next) => {
         })
     }
 }
+
+export default protect; 

@@ -1,4 +1,4 @@
-import User from "../models/user.model";
+import User from "../models/user.model.js";
 import jwt from 'jsonwebtoken'
 import bcrypt from "bcryptjs";
 // Genarate json web token
@@ -10,60 +10,64 @@ const generateToken = (id) => {
 
 
 // API TO register user
-
 export const registerUser = async (req, res) => {
    const { name, email, password } = req.body;
 
    try {
-      const userExists = await User.findOne({ email })
+      const userExists = await User.findOne({ email });
 
       if (userExists) {
-         return res.json({ success: false, message: "User already exists" })
+         return res.json({ success: false, message: "User already exists" });
       }
-      const user = await User.create({ name, email, password })
-      const token = generateToken(user._id)
-      res.json({ success: true, token })
+
+      const user = await User.create({ name, email, password });
+      const token = generateToken(user._id);
+
+
+      return res.status(201).json({ success: true, token });
+
    } catch (error) {
-      return res.json(
-         {
-            success: false, message: error.message
-         }
-      )
+      console.error(error);
+
+      return res.json({
+         success: false,
+         message: error.message,
+      });
    }
 }
 
 // API to login user
 export const loginUser = async (req, res) => {
-   const {email, password} = req.body;
+   const { email, password } = req.body;
 
-   try{
-     const user = await User.findOne({email})
+   try {
+      const user = await User.findOne({ email })
 
-     if(user){
-      const isMatch = await bcrypt.compare(password, user.password)
+      if (user) {
+         const isMatch = await bcrypt.compare(password, user.password)
 
-      if(isMatch){
-         const token = generateToken(user._id);
-         return res.json({
-            success: true,  token
-         })
+         if (isMatch) {
+            const token = generateToken(user._id);
+            return res.json({
+               success: true, token
+            })
+         }
       }
-     }
-     return res.json({
-      success: false, message: "Invalid email or password"
-     })
-   }catch(error){
-     return res.json({ success: false, message: error.message})
+      return res.json({
+         success: false, message: "Invalid email or password"
+      })
+   } catch (error) {
+      return res.json({ success: false, message: error.message })
    }
 }
 
 // API to get user data
-export const getUser = async (req, res)=> {
-   try{
+export const getUser = async (req, res) => {
+   try {
       const user = req.user;
-      return res.json({success: true, user})
+      return res.json({ success: true, user })
 
-   } catch (error){
+   } catch (error) {
       return res.json({
          success: false, message: error.message
       })
