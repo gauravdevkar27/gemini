@@ -23,3 +23,21 @@ export const createChat = async (req, res) => {
 
     }
 }
+
+// API Controller for getting all chats
+export const getChats = async (req, res) => {
+    try {
+        const userId = req.user._id
+        const chats = await Chat.find({
+            userId
+        }).sort({ updatedAt: -1 })
+
+        res.json({ success: false, message: error.message });
+
+
+    } catch (error) {
+        res.json({
+            success: false, message: error.message
+        })
+    }
+}
