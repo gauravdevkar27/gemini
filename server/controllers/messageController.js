@@ -21,6 +21,7 @@ export const textMessageController = async (req, res) => {
             role: "user", content: prompt, timestamp: Date.now(),
             isImage: false
         })
+        
 
         const { choices } = await openai.chat.completions.create({
             model: "gemini-2.0-flash",
@@ -103,15 +104,15 @@ export const imageMsgController = async (req, res) => {
             isImage: true,
             isPublished
         }
-        res.json({ success: true, reply })
+       
 
         chat.messages.push(reply)
         await chat.save()
-
         await User.updateOne({ _id: userId }, { $inc: { credits: -2 } })
-
+        res.json({ success: true, reply })
 
     } catch (error) {
         res.json({ success: false, message: error.message })
     }
 }
+
