@@ -12,20 +12,19 @@ const app = express()
 
 await connectDB()
 
+app.use(cors())
+
 //Razorpay webhook
 app.post('/api/razorpay', express.raw({type: 'application/json'}), razorpayWebhook)
 
-app.use(cors())
 app.use(express.json())
 
 //Routes
-app.get('/', (req, res) => res.send("Server is Live!"))
+app.get('/api', (req, res) => res.send("Server is Live!"))
 app.use('/api/users', userRouter)
 app.use('/api/chat', chatRouter)
 app.use('/api/message', messageRouter)
 app.use('/api/credit', creditRouter)
-const PORT = process.env.PORT || 3000
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`)
-})
+// Export the app for Vercel
+export default app;

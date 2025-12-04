@@ -74,7 +74,7 @@ export const purchasePlan = async (req, res) => {
             currency: "INR",
             reference_id: transaction._id.toString(),
             description: `Purchase of ${plan.name} plan`,
-            callback_url: `${frontendUrl}/verify-payment`,
+            callback_url: `${frontendUrl}/credits`,
             callback_method: 'get',
         });
 
