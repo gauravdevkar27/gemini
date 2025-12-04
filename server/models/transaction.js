@@ -14,7 +14,12 @@ const transactionSchema = new mongoose.Schema({
         type: Number, required: true
     },
     credits: { type: Number, required: true },
-    isPaid: { type: Boolean, default: false }
+    isPaid: { type: Boolean, default: false },
+    status: {
+        type: String,
+        enum: ['pending', 'paid', 'cancelled', 'expired', 'failed'],
+        default: 'pending'
+    }
 }, {timestamps: true})
 
 const Transaction = mongoose.model('Transaction', transactionSchema);
