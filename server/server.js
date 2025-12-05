@@ -21,7 +21,7 @@ app.use((req, res, next) => {
   next()
 })
 //Razorpay webhook
-app.post('/api/razorpay', express.raw({type: 'application/json'}), razorpayWebhook)
+app.post('/api/razorpay', express.raw({ type: 'application/json' }), razorpayWebhook)
 
 app.use(express.json())
 
