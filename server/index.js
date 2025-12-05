@@ -33,4 +33,6 @@ app.use('/api/message', messageRouter)
 app.use('/api/credit', creditRouter)
 
 // Export the app for Vercel
-export default app;
+export default function handler(req, res) {
+  return app(req, res)
+}
