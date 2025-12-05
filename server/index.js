@@ -32,5 +32,4 @@ app.use('/api/chat', chatRouter)
 app.use('/api/message', messageRouter)
 app.use('/api/credit', creditRouter)
 
-// Export the app for Vercel
 export default app;
