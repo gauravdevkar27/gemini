@@ -30,7 +30,7 @@ app.post('/api/razorpay', express.raw({ type: 'application/json' }), razorpayWeb
 app.use(express.json())
 
 //Routes
-app.get('/api', (req, res) => res.send("Server is Live!"))
+app.get('/', (req, res) => res.send("Server is Live!"))
 app.use('/api/users', userRouter)
 app.use('/api/chat', chatRouter)
 app.use('/api/message', messageRouter)
