@@ -13,6 +13,9 @@ const app = express()
 await connectDB()
 
 app.use(cors())
+
+const PORT = process.env.PORT || 3000
+
 // Disable caching for API routes
 app.use((req, res, next) => {
   res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
@@ -20,6 +23,7 @@ app.use((req, res, next) => {
   res.set('Expires', '0')
   next()
 })
+
 //Razorpay webhook
 app.post('/api/razorpay', express.raw({ type: 'application/json' }), razorpayWebhook)
 
@@ -31,5 +35,10 @@ app.use('/api/users', userRouter)
 app.use('/api/chat', chatRouter)
 app.use('/api/message', messageRouter)
 app.use('/api/credit', creditRouter)
+
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`)
+})
 
 export default app;
