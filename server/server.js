@@ -16,13 +16,7 @@ app.use(cors())
 
 const PORT = process.env.PORT || 3000
 
-// Disable caching for API routes
-app.use((req, res, next) => {
-  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate')
-  res.set('Pragma', 'no-cache')
-  res.set('Expires', '0')
-  next()
-})
+
 
 //Razorpay webhook
 app.post('/api/razorpay', express.raw({ type: 'application/json' }), razorpayWebhook)

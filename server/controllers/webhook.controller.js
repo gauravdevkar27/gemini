@@ -8,7 +8,9 @@ export const razorpayWebhook = async (req, res) => {
     const shasum = crypto.createHmac('sha256', secret);
     shasum.update(JSON.stringify(req.body));
     const digest = shasum.digest('hex');
-
+    console.log(digest);
+    console.log(req.headers['x-razorpay-signature']);
+    
     if (digest !== req.headers['x-razorpay-signature']) {
         console.error("Webhook Error: Invalid signature");
         return res.status(403).json({ success: false, message: "Invalid signature" });

@@ -7,7 +7,7 @@ import imagekit from '../configs/imagekit.js'
 export const textMessageController = async (req, res) => {
     try {
         const userId = req.user._id
-
+ 
         //check credits
         if (req.user.credits < 1) {
             return res.json({ success: false, message: "You don`t have enough credits to use this feature" })
@@ -22,7 +22,7 @@ export const textMessageController = async (req, res) => {
             isImage: false
         })
         
-
+        console.log(chat);
         const { choices } = await openai.chat.completions.create({
             model: "gemini-2.0-flash",
             messages: [
@@ -32,22 +32,24 @@ export const textMessageController = async (req, res) => {
                 },
             ],
         });
-
+        
         const reply = {
             ...choices[0].message, timestamp: Date.now(),
             isImage: false
         }
-
+        console.log("reply", choices);
+        console.log(process.env.GEMINI_API_KEY);
         chat.messages.push(reply)
-        res.json({ success: true, reply })
+        
         await chat.save()
 
         await User.updateOne({ _id: userId }, { $inc: { credits: -1 } })
 
-
+         res.json({ success: true, reply })
 
     } catch (error) {
-
+        console.error(error.message);
+        console.error(error);
         res.json({ success: false, message: error.message })
     }
 }

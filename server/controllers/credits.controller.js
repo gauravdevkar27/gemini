@@ -67,14 +67,14 @@ export const purchasePlan = async (req, res) => {
             credits: plan.credits,
             isPaid: false
         })
-        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173/credits';
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
 
         console.log('Creating payment link with:', {
             amount: plan.price * 100,
             currency: "INR",
             reference_id: transaction._id.toString(),
             description: `Purchase of ${plan.name} plan`,
-            callback_url: `${frontendUrl}/credits`,
+            callback_url: `${frontendUrl}/credits?transaction_id=${transaction._id.toString()}`,
             callback_method: 'get',
         });
 
@@ -83,7 +83,7 @@ export const purchasePlan = async (req, res) => {
             currency: "INR",
             reference_id: transaction._id.toString(),
             description: `Purchase of ${plan.name} plan`,
-            callback_url: `${frontendUrl}/verify-payment`,
+            callback_url: `${frontendUrl}/credits?transaction_id=${transaction._id.toString()}`,
             callback_method: 'get',
         });
         
