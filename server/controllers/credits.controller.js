@@ -83,6 +83,9 @@ export const purchasePlan = async (req, res) => {
             currency: "INR",
             reference_id: transaction._id.toString(),
             description: `Purchase of ${plan.name} plan`,
+            notes: {
+                transaction_id: transaction._id.toString()
+            },
             callback_url: `${frontendUrl}/credits?transaction_id=${transaction._id.toString()}`,
             callback_method: 'get',
         });
@@ -105,6 +108,27 @@ export const purchasePlan = async (req, res) => {
         })
     }
 }
+
+export const checkPaymentStatus = async (req, res) => {
+    try {
+        const { transactionId } = req.params;
+        const userId = req.user._id;
+
+        const transaction = await Transaction.findOne({ _id: transactionId, userId: userId });
+
+        if (!transaction) {
+            return res.status(404).json({ success: false, message: "Transaction not found" });
+        }
+
+        res.json({
+            success: true,
+            isPaid: transaction.isPaid
+        });
+
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
 
 export const verifyPayment = async (req, res) => {
     try {

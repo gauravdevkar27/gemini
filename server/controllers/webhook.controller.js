@@ -6,8 +6,9 @@ export const razorpayWebhook = async (req, res) => {
     const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
 
     const shasum = crypto.createHmac('sha256', secret);
-    shasum.update(JSON.stringify(req.body));
+    shasum.update(req.body);
     const digest = shasum.digest('hex');
+    
     console.log(digest);
     console.log(req.headers['x-razorpay-signature']);
     
@@ -16,10 +17,15 @@ export const razorpayWebhook = async (req, res) => {
         return res.status(403).json({ success: false, message: "Invalid signature" });
     }
 
-    const { event, payload } = req.body;
-    const paymentLink = payload.payment_link;
-    const transactionId = paymentLink?.reference_id;
+    // Now that the signature is verified, parse the body.
+    const { event, payload } = JSON.parse(req.body.toString());
+    
+    // Get transactionId from the correct location based on the event type.
+    const transactionId = payload.payment_link?.reference_id || payload.payment?.entity?.notes?.transaction_id;
 
+    console.log("Trasaction", transactionId);
+    console.log("payload", payload);
+    
     if (!transactionId) {
         // Not an event we can link to a transaction, but acknowledge it.
         return res.json({ status: 'ok' });
