@@ -14,7 +14,7 @@ await connectDB()
 
 app.use(cors())
 
-const PORT = process.env.PORT || 3000
+//const PORT = process.env.PORT || 3000
 
 
 
@@ -31,8 +31,8 @@ app.use('/api/message', messageRouter)
 app.use('/api/credit', creditRouter)
 
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`)
-})
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`)
+// })
 
 export default app;
