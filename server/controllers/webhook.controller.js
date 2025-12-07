@@ -4,21 +4,24 @@ import User from "../models/user.model.js";
 
 export const razorpayWebhook = async (req, res) => {
     const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
+    // The raw body is needed for signature verification
+    const requestBody = req.rawBody;
 
     const shasum = crypto.createHmac('sha256', secret);
-    shasum.update(req.body);
+    shasum.update(requestBody);
     const digest = shasum.digest('hex');
     
-    console.log(digest);
-    console.log(req.headers['x-razorpay-signature']);
+    console.log("Digest:", digest);
+    console.log("Razorpay Signature:", req.headers['x-razorpay-signature']);
     
     if (digest !== req.headers['x-razorpay-signature']) {
         console.error("Webhook Error: Invalid signature");
         return res.status(403).json({ success: false, message: "Invalid signature" });
     }
+    console.log("Webhook signature verified successfully.");
 
     // Now that the signature is verified, parse the body.
-    const { event, payload } = JSON.parse(req.body.toString());
+    const { event, payload } = JSON.parse(requestBody);
     
     // Get transactionId from the correct location based on the event type.
     const transactionId = payload.payment_link?.reference_id || payload.payment?.entity?.notes?.transaction_id;
