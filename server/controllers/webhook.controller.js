@@ -5,7 +5,8 @@ import User from "../models/user.model.js";
 export const razorpayWebhook = async (req, res) => {
     const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
     // The raw body is needed for signature verification
-    const requestBody = req.rawBody;
+    // With `express.raw()`, the raw buffer is in `req.body`
+    const requestBody = req.body;
 
     const shasum = crypto.createHmac('sha256', secret);
     shasum.update(requestBody);
