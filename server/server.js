@@ -10,7 +10,14 @@ import { razorpayWebhook } from './controllers/webhook.controller.js'
 
 const app = express()
 
-await connectDB()
+(async function initDB() {
+  try {
+    await connectDB()
+    console.log('DB connected')
+  } catch (err) {
+    console.error('DB connection failed', err)
+  }
+})()
 
 app.use(cors())
 
