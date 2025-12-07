@@ -10,18 +10,11 @@ import { razorpayWebhook } from './controllers/webhook.controller.js'
 
 const app = express()
 
-(async function initDB() {
-  try {
-    await connectDB()
-    console.log('DB connected')
-  } catch (err) {
-    console.error('DB connection failed', err)
-  }
-})()
+await connectDB()
 
 app.use(cors())
 
-//const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000
 
 
 
@@ -38,8 +31,8 @@ app.use('/api/message', messageRouter)
 app.use('/api/credit', creditRouter)
 
 
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}`)
-// })
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`)
+})
 
 export default app;
