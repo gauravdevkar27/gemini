@@ -12,13 +12,17 @@ AI Integration: Gemini API (Google’s generative AI platform)
 
 Authentication: JWT‑based authentication & authorization
 
-Deployment: Configurable for cloud platform vercel
+For Online payment: Razorpay payment gateway method
+
+Deployment: Configurable for cloud platform render
 
 
 ✨ Features
 🔹 AI‑powered chat interface using Gemini API
 
 🔹 Content generation (summaries, blog posts, Q&A, etc.)
+
+🔹 Image generation with Imagekit
 
 🔹 Secure user authentication with JWT
 
