@@ -18,7 +18,6 @@ const PORT = process.env.PORT || 3000
 
 //Razorpay webhook
 app.post('/api/razorpay', express.raw({ type: 'application/json' }), razorpayWebhook)
-
 app.use(express.json())
 
 //Routes
