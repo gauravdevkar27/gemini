@@ -2,13 +2,14 @@ import User from "../models/user.model.js";
 import jwt from 'jsonwebtoken'
 import bcrypt from "bcryptjs";
 import Chat from "../models/chats.model.js";
+
 // Genarate json web token
+
 const generateToken = (id) => {
    return jwt.sign({ id }, process.env.JWT_SECRET, {
       expiresIn: '1d'
    })
 }
-
 
 // API TO register user
 export const registerUser = async (req, res) => {
@@ -23,7 +24,6 @@ export const registerUser = async (req, res) => {
 
       const user = await User.create({ name, email, password });
       const token = generateToken(user._id);
-
 
       return res.status(201).json({ success: true, token });
 
@@ -45,6 +45,7 @@ export const loginUser = async (req, res) => {
       const user = await User.findOne({ email })
 
       if (user) {
+         
          const isMatch = await bcrypt.compare(password, user.password)
 
          if (isMatch) {

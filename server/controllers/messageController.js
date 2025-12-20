@@ -17,7 +17,7 @@ export const textMessageController = async (req, res) => {
 
         const { chatId, prompt } = req.body
 
-       // console.log(req.body)
+        // console.log(req.body)
 
         if (!chatId || !prompt) {
             return res.json({ success: false, message: "Chat ID and prompt are required" })
@@ -44,7 +44,7 @@ export const textMessageController = async (req, res) => {
                 },
             ],
         });
-        
+
         const reply = {
             ...choices[0].message, timestamp: Date.now(),
             isImage: false

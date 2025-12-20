@@ -39,16 +39,12 @@ export const getPlans = async (req, res) => {
     }
 }
 
-
-
 export const purchasePlan = async (req, res) => {
     try {
-        
         const instance = new Razorpay({
             key_id: process.env.RAZORPAY_API_KEY,
             key_secret: process.env.RAZORPAY_API_SECRET,
         });
-       
 
         const { planId } = req.body
         const userId = req.user._id
@@ -67,6 +63,7 @@ export const purchasePlan = async (req, res) => {
             credits: plan.credits,
             isPaid: false
         })
+
         const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173/';
 
         console.log('Creating payment link with:', {
@@ -89,8 +86,8 @@ export const purchasePlan = async (req, res) => {
             callback_url: `${frontendUrl}/credits?transaction_id=${transaction._id.toString()}`,
             callback_method: 'get',
         });
-        
-       // console.log('Payment Link Created:', paymentLink.short_url);
+
+        // console.log('Payment Link Created:', paymentLink.short_url);
 
         res.json({
             success: true,

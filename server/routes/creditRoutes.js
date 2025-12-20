@@ -7,4 +7,5 @@ const creditRouter = express.Router();
 creditRouter.get('/plan', getPlans)
 creditRouter.post('/purchase', protect, purchasePlan)
 creditRouter.get('/status/:transactionId', protect, checkPaymentStatus);
+
 export default creditRouter;
