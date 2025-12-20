@@ -107,6 +107,7 @@ export const purchasePlan = async (req, res) => {
 }
 
 export const checkPaymentStatus = async (req, res) => {
+    
     try {
         const { transactionId } = req.params;
         const userId = req.user._id;

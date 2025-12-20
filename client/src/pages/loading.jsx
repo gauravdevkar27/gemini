@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppContext } from '../context/appContext'
+
 const loading = () => {
   const navigate = useNavigate()
   const { fetchUser } = useAppContext()
