@@ -9,39 +9,38 @@ const login = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-   const {axios, setToken} = useAppContext()
-   const navigate = useNavigate()
-
+  const { axios, setToken } = useAppContext()
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
-      e.preventDefault()
-      let payload;
-      let url;
+    e.preventDefault()
+    let payload;
+    let url;
 
-      if (state === 'login') {
-        url = '/api/users/login';
-        payload = { email, password };
+    if (state === 'login') {
+      url = '/api/users/login';
+      payload = { email, password };
+    } else {
+      url = '/api/users/register';
+      payload = { name, email, password };
+    }
+
+    try {
+      const { data } = await axios.post(url, payload)
+      if (data.success) {
+        console.log(data);
+        console.log(data.token);
+        setToken(data.token)
+        localStorage.setItem('token', data.token)
+        navigate('/') // Redirect to home page
       } else {
-        url = '/api/users/register';
-        payload = { name, email, password };
+        toast.error(data.message)
       }
+    }
+    catch (error) {
+      toast.error(error.message)
 
-      try{
-        const {data} = await axios.post(url, payload)
-        if(data.success){
-          console.log(data);
-          console.log(data.token);
-          setToken(data.token)
-          localStorage.setItem('token', data.token)
-          navigate('/') // Redirect to home page
-        }else{
-          toast.error(data.message)
-        }
-      }
-      catch(error){
-        toast.error(error.message)
-      
-      }
+    }
   }
 
 

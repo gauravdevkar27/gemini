@@ -50,37 +50,36 @@ export const AppContextProvider = ({ children }) => {
     }
 
     const createNewChat = async () => {
-        try{
-            if(!user) return toast("Login to create a new chat")
+        try {
+            if (!user) return toast("Login to create a new chat")
             navigate('/')
             await axios.get('/api/chat/create')
             await fetchUsersChats()
         }
-        catch(error){
+        catch (error) {
             toast.error(error.message)
         }
     }
 
-
     const fetchUsersChats = async () => {
         try {
             const { data } = await axios.get('/api/chat/get')
-            if(data.success){
+            if (data.success) {
                 setChats(data.chats)
-                if(data.chats.length === 0){
+                if (data.chats.length === 0) {
                     await createNewChat();
                     return fetchUsersChats()
                 }
-                else{
+                else {
                     setSelectedChat(data.chats[0])
                 }
             }
-            else{
+            else {
                 toast.error(data.message)
             }
-           
+
         } catch (error) {
-         toast.error(error.message)
+            toast.error(error.message)
         }
     }
 
@@ -107,10 +106,10 @@ export const AppContextProvider = ({ children }) => {
     }, [user])
 
     useEffect(() => {
-        if(token){
+        if (token) {
             fetchUser()
         }
-        else{
+        else {
             setUser(null)
             setLoadingUser(false)
         }

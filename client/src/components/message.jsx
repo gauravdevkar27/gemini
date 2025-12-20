@@ -6,7 +6,7 @@ import Prism from 'prismjs'
 const Message = ({ message }) => {
 
   useEffect(() => {
-     Prism.highlightAll()
+    Prism.highlightAll()
   }, [message.content])
 
   return (
@@ -25,19 +25,19 @@ const Message = ({ message }) => {
       ) : (
         <div className='inline-flex flex-col gap-2 p-2 max-w-2xl bg-primary/20
           dark:bg-[#57317C]/30 border border-[#80609F]/30 rounded-md my-4'>
-         
-          {message.isImage ? 
-          (
-            <img src={message.content} alt='' className='w-full max-w-md mt-2 rounded-md' />
-          ) : (
 
-            <div className='text-sm dark:text-primary reset-tw'><Markdown>{message.content}</Markdown></div>
-          )
+          {message.isImage ?
+            (
+              <img src={message.content} alt='' className='w-full max-w-md mt-2 rounded-md' />
+            ) : (
+
+              <div className='text-sm dark:text-primary reset-tw'><Markdown>{message.content}</Markdown></div>
+            )
           }
           <span className='text-xs text-gray-400 dark:text-[#B1A6C0]'>{moment(Number(message.timestamp)).fromNow()}</span>
         </div>
       )}
-     
+
     </div>
   )
 }

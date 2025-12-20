@@ -4,7 +4,6 @@ import Loading from './loading'
 import { useAppContext } from '../context/appContext'
 import toast from 'react-hot-toast'
 
-
 const credits = () => {
 
   const [plans, setPlans] = useState([])
@@ -34,18 +33,18 @@ const credits = () => {
     try {
       const { data } = await axios.post('/api/credit/purchase',
         { planId }, { headers: { Authorization: token } })
-      if(data.success){
+      if (data.success) {
         window.location.href = data.url
       }
-      else{
+      else {
         toast.error(data.message)
       }
     }
-    catch(error){
+    catch (error) {
       toast.error(error.message)
     }
 
-}
+  }
 
 
   useEffect(() => {
@@ -82,7 +81,7 @@ const credits = () => {
                   ))}
                 </ul>
               </div>
-              <button onClick={() => toast.promise(purchasePlan(plan._id), {loading: "Processing..."})} className='mt-6 bg-purple-600 hover:bg-purple-700
+              <button onClick={() => toast.promise(purchasePlan(plan._id), { loading: "Processing..." })} className='mt-6 bg-purple-600 hover:bg-purple-700
               active:bg-purple-800 text-white font-medium py-2 rounded
               transition-colors cursor-pointer'>Buy Now</button>
 

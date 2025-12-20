@@ -30,7 +30,7 @@ const Chatbox = () => {
 
       const { data } = await axios.post(`/api/message/${mode}`, {
         chatId:
-        selectedChat?._id,
+          selectedChat?._id,
         prompt: promptCopy,
         isPublished
       }, { headers: { Authorization: token } })
