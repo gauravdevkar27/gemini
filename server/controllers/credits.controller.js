@@ -67,7 +67,7 @@ export const purchasePlan = async (req, res) => {
             credits: plan.credits,
             isPaid: false
         })
-        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173/';
 
         console.log('Creating payment link with:', {
             amount: plan.price * 100,
@@ -90,7 +90,7 @@ export const purchasePlan = async (req, res) => {
             callback_method: 'get',
         });
         
-        console.log('Payment Link Created:', paymentLink.short_url);
+       // console.log('Payment Link Created:', paymentLink.short_url);
 
         res.json({
             success: true,

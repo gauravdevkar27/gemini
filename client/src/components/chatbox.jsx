@@ -2,31 +2,71 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useAppContext } from '../context/appContext'
 import { assets } from '../assets/assets'
 import Message from './message'
+import toast from 'react-hot-toast'
 
-const chatbox = () => {
-  
-   const containerRef = useRef(null)
+const Chatbox = () => {
 
-  const { selectedChat, theme } = useAppContext()
+  const containerRef = useRef(null)
+
+  const { selectedChat, theme, user, axios, token, setUser } = useAppContext()
 
   const [messages, setMessages] = useState([])
   const [loading, setLoading] = useState(false)
-  const [promt, setPromt] = useState('')
+  const [prompt, setprompt] = useState('')
   const [mode, setMode] = useState('text');
 
   const [isPublished, setIsPublished] = useState(false)
   const onSubmit = async (e) => {
-       e.preventDefault()
+
+    try {
+      e.preventDefault()
+
+      if (!user) return toast("Login to send message")
+      setLoading(true)
+
+      const promptCopy = prompt
+      setprompt('')
+      setMessages(prev => [...prev, { role: 'user', content: prompt, timestamp: Date.now(), isImage: false }])
+
+      const { data } = await axios.post(`/api/message/${mode}`, {
+        chatId:
+        selectedChat?._id,
+        prompt: promptCopy,
+        isPublished
+      }, { headers: { Authorization: token } })
+
+      if (data.success) {
+        setMessages(prev => [...prev, data.reply])
+        if (mode === 'image') {
+          setUser(prev => ({ ...prev, credits: prev.credits - 2 }))
+
+        } else {
+          setUser(prev => ({ ...prev, credits: prev.credits - 1 }))
+
+        }
+      } else {
+        toast.error(data.message)
+        setprompt(promptCopy)
+      }
+
+    } catch (error) {
+      toast.error(error.message)
+    } finally {
+      setprompt('')
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
     if (selectedChat) {
       setMessages(selectedChat.messages)
+    } else {
+      setMessages([])
     }
   }, [selectedChat])
- 
-  useEffect(()=>{
-    if(containerRef.current){
+
+  useEffect(() => {
+    if (containerRef.current) {
       containerRef.current.scrollTo({
         top: containerRef.current.scrollHeight,
         behaviour: "smooth",
@@ -44,7 +84,7 @@ const chatbox = () => {
         text-primary'>
             <img src={theme === 'dark' ? assets.logo_full : assets.logo_full_dark}
               alt='' className='w-full max-w-56 sm:max-w-68' />
-            <p className='mt-5 text-4xl sm:tex-6xl text-center text-gray-400
+            <p className='mt-5 text-4xl sm:text-6xl text-center text-gray-400
           dark:text-white'>Ask me anything</p>
           </div>
         )}
@@ -54,7 +94,7 @@ const chatbox = () => {
         ))}
         {/* three dots loading */}
         {
-           loading && <div className='loader flex items-center gap-1.5'>
+          loading && <div className='loader flex items-center gap-1.5'>
             <div className='w-1.5 h-1.5 rounded-full bg-gray-500 dark:bg-white
             animate-bounce'>  </div>
             <div className='w-1.5 h-1.5 rounded-full bg-gray-500 dark:bg-white
@@ -62,37 +102,37 @@ const chatbox = () => {
             <div className='w-1.5 h-1.5 rounded-full bg-gray-500 dark:bg-white
             animate-bounce'>  </div>
 
-           </div>
+          </div>
         }
       </div>
-       
-       {mode === 'image' && (
+
+      {mode === 'image' && (
         <label className='inline-flex items-center gap-2 mb-3 text-sm mx-auto'>
           <p className='text-xs'>Publish Generated Image to Community</p>
           <input type='checkbox' className='cursor-pointer' checked={isPublished}
-          onChange={(e) => setIsPublished(e.target.checked)}/>
+            onChange={(e) => setIsPublished(e.target.checked)} />
         </label>
-       )}
+      )}
 
       {/* Prompt Input Box */}
       <form onSubmit={onSubmit} className='bg-primary/20 dark:bg-[#583C79]/30 border border-primary
       dark:border-[#80609F]/30 rounded-full w-full max-w-2xl p-3 pl-4 mx-auto flex
       gap-4 items-center'>
-         <select onChange={(e) => {
+        <select onChange={(e) => {
           setMode(e.target.value)
-         }} value={mode} className='text-sm pl-3 pr-2 outline-none'>
+        }} value={mode} className='text-sm pl-3 pr-2 outline-none'>
           <option className='dark:bg-purple-900' value="text">Text</option>
-         <option className='dark:bg-purple-900' value="image">Image</option>
-         </select>
-         <input onChange={(e)=> setPromt(e.target.value)} value={promt} type='text' placeholder='Type your promt here...' className='flex-1
-         w-full text-sm outline-none' required/>
-         <button disabled={loading}>
+          <option className='dark:bg-purple-900' value="image">Image</option>
+        </select>
+        <input onChange={(e) => setprompt(e.target.value)} value={prompt} type='text' placeholder='Type your prompt here...' className='flex-1
+         w-full text-sm outline-none' required />
+        <button disabled={loading}>
           <img src={loading ? assets.stop_icon : assets.send_icon} className='w-8
-          cursor-pointer' alt=''/>
-         </button>
+          cursor-pointer' alt='' />
+        </button>
       </form>
     </div>
   )
 }
 
-export default chatbox
+export default Chatbox;

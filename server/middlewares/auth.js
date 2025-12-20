@@ -4,7 +4,7 @@ import User from "../models/user.model.js"; // adjust path as needed
 export const protect = async (req, res, next) => {
   let token;
 
-  try {
+  try { 
     // Check for token in Authorization header
     if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
       token = req.headers.authorization.split(" ")[1];

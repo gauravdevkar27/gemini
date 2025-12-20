@@ -24,7 +24,7 @@ export const createChat = async (req, res) => {
     }
 }
 //API Controller for deleting chats
-export const deleteChat =async () => {
+export const deleteChat =async (req, res) => {
  try{
         const userId = req.user._id
         const {chatId} = req.body

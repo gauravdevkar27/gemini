@@ -10,4 +10,3 @@ userRouter.get('/data', protect, getUser)
 userRouter.get('/published-images', getPublishedImages)
 
 export default userRouter;
-

@@ -18,7 +18,7 @@ export const registerUser = async (req, res) => {
       const userExists = await User.findOne({ email });
 
       if (userExists) {
-         return res.json({ success: false, message: "User already exists" });
+         return res.status(400).json({ success: false, message: "User already exists" });
       }
 
       const user = await User.create({ name, email, password });
@@ -30,7 +30,7 @@ export const registerUser = async (req, res) => {
    } catch (error) {
       console.error(error);
 
-      return res.json({
+      return res.status(500).json({
          success: false,
          message: error.message,
       });
@@ -49,16 +49,16 @@ export const loginUser = async (req, res) => {
 
          if (isMatch) {
             const token = generateToken(user._id);
-            return res.json({
+            return res.status(200).json({
                success: true, token
             })
          }
       }
-      return res.json({
+      return res.status(401).json({
          success: false, message: "Invalid email or password"
       })
    } catch (error) {
-      return res.json({ success: false, message: error.message })
+      return res.status(500).json({ success: false, message: error.message })
    }
 }
 
@@ -66,11 +66,11 @@ export const loginUser = async (req, res) => {
 export const getUser = async (req, res) => {
    try {
       const user = req.user;
-      return res.json({ success: true, user })
+      return res.status(200).json({ success: true, user })
 
    } catch (error) {
-      console.error(message.error);
-      return res.json({
+      console.error(error);
+      return res.status(500).json({
          success: false, message: error.message
       })
 

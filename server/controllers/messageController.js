@@ -3,11 +3,12 @@ import User from '../models/user.model.js'
 import axios from 'axios'
 import openai from '../configs/openai.js'
 import imagekit from '../configs/imagekit.js'
+
 //Text based ai chat msg controller
 export const textMessageController = async (req, res) => {
     try {
         const userId = req.user._id
- 
+
         //check credits
         if (req.user.credits < 1) {
             return res.json({ success: false, message: "You don`t have enough credits to use this feature" })
@@ -16,15 +17,26 @@ export const textMessageController = async (req, res) => {
 
         const { chatId, prompt } = req.body
 
+       // console.log(req.body)
+
+        if (!chatId || !prompt) {
+            return res.json({ success: false, message: "Chat ID and prompt are required" })
+        }
+
         const chat = await Chat.findOne({ userId, _id: chatId })
+
+        if (!chat) {
+            return res.status(404).json({ success: false, message: "Chat not found" });
+        }
+
         chat.messages.push({
             role: "user", content: prompt, timestamp: Date.now(),
             isImage: false
         })
-        
-        console.log(chat);
+
+        //console.log(chat);
         const { choices } = await openai.chat.completions.create({
-            model: "gemini-2.0-flash",
+            model: "openai/gpt-oss-20b",
             messages: [
                 {
                     role: "user",
@@ -37,15 +49,14 @@ export const textMessageController = async (req, res) => {
             ...choices[0].message, timestamp: Date.now(),
             isImage: false
         }
-        console.log("reply", choices);
-        console.log(process.env.GEMINI_API_KEY);
+        //console.log("reply", reply);
         chat.messages.push(reply)
-        
+
         await chat.save()
 
         await User.updateOne({ _id: userId }, { $inc: { credits: -1 } })
 
-         res.json({ success: true, reply })
+        res.json({ success: true, reply })
 
     } catch (error) {
         console.error(error.message);
@@ -65,8 +76,17 @@ export const imageMsgController = async (req, res) => {
         }
 
         const { prompt, chatId, isPublished } = req.body
+
+        if (!chatId || !prompt) {
+            return res.json({ success: false, message: "Chat ID and prompt are required" })
+        }
+
         //find chat
         const chat = await Chat.findOne({ userId, _id: chatId })
+
+        if (!chat) {
+            return res.status(404).json({ success: false, message: "Chat not found" });
+        }
 
         // push user msg
         chat.messages.push({
@@ -106,7 +126,7 @@ export const imageMsgController = async (req, res) => {
             isImage: true,
             isPublished
         }
-       
+
 
         chat.messages.push(reply)
         await chat.save()
@@ -117,4 +137,3 @@ export const imageMsgController = async (req, res) => {
         res.json({ success: false, message: error.message })
     }
 }
-

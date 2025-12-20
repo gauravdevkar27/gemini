@@ -18,7 +18,7 @@ const Message = ({ message }) => {
         border border-gray-300 dark:border-[#80609F]/30 
         rounded-md max-w-2xl'>
             <p className='text-sm text-gray-900 dark:text-[#E6E1F0]'>{message.content}</p>
-            <span className='text-xs text-gray-500 dark:text-[#B1A6C0]'>{moment(message.timestamp).fromNow()}</span>
+            <span className='text-xs text-gray-500 dark:text-[#B1A6C0]'>{moment(Number(message.timestamp)).fromNow()}</span>
           </div>
           <img src={assets.user_icon} alt='' className='w-8 rounded-full' />
         </div>
@@ -34,7 +34,7 @@ const Message = ({ message }) => {
             <div className='text-sm dark:text-primary reset-tw'><Markdown>{message.content}</Markdown></div>
           )
           }
-          <span className='text-xs text-gray-400 dark:text-[#B1A6C0]'>{moment(message.timestamp).fromNow()}</span>
+          <span className='text-xs text-gray-400 dark:text-[#B1A6C0]'>{moment(Number(message.timestamp)).fromNow()}</span>
         </div>
       )}
      
