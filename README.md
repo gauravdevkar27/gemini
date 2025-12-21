@@ -58,10 +58,10 @@ Install dependencies for both Client and Server:
 
 Bash
 
-# For backend
+For backend
 npm install
 
-# For frontend
+For frontend
 cd client
 npm install
 Environment Variables: Create a .env file in the root directory and add:
