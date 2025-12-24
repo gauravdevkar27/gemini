@@ -5,7 +5,7 @@ const openai = new OpenAI({
     baseURL: "https://api.groq.com/openai/v1",
 });
 
-if (!process.env.GEMINI_API_KEY) {
+if (!process.env.GROK_API) {
     console.warn("API_KEY is not set. Please check your .env file.");
 }
 export default openai;
