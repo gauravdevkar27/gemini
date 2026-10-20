@@ -99,9 +99,7 @@ export const imageMsgController = async (req, res) => {
         //Encode the prompt
         const encodedPrompt = encodeURIComponent(prompt)
         //construct imagekit ai generation url
-        const generatedImageUrl = `${process.env.IMAGEKIT_URL_ENDPOINT}/
-     ik-genimg-prompt-${encodedPrompt}/Quickgpt/${Date.now()}.png?tr=w-800,
-      h-800`;
+        const generatedImageUrl = `${process.env.IMAGEKIT_URL_ENDPOINT}/ik-genimg-prompt-${encodedPrompt}/Quickgpt/${Date.now()}.png?tr=w-800,h-800`;
 
 
         // Trigger generation by fetching from imagekit
@@ -109,8 +107,7 @@ export const imageMsgController = async (req, res) => {
 
         //convert to base64
 
-        const base64Image = `data:image/png;base64, ${Buffer.from(aiImageResponse.
-            data, 'binary').toString('base64')}`;
+        const base64Image = `data:image/png;base64,${Buffer.from(aiImageResponse.data, 'binary').toString('base64')}`;
 
         //upload to imgkit media libr
         const uploadResponse = await imagekit.upload({
